@@ -8,9 +8,9 @@ services:
     volumes:
       - ./data/db:/var/lib/postgresql/data
     environment:
-      - POSTGRES_DB=$DB_NAME
-      - POSTGRES_USER=$DB_USER
-      - POSTGRES_PASSWORD=$DB_PASS
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
   web_api:
     hostname: web-api
     build:
@@ -19,11 +19,11 @@ services:
     networks:
       - do-more-with-less-net
     environment:
-      DB_NAME: $DB_NAME
-      DB_USER: $DB_USER
-      DB_PASS: $DB_PASS
-      DB_HOST: $DB_HOST
-      DB_PORT: $DB_PORT
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_HOST: db
+      DB_PORT: 5432
     volumes:
       - ./web_api:/opt/app
     ports:

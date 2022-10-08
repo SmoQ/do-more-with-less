@@ -5,7 +5,7 @@ ENV APP_DIR /opt/app
 
 ENV PYTHONPATH "${PYTHONPATH}:${APP_DIR}/"
 
-RUN pip install --upgrade pip && apt-get update && apt-get install -y python3-dev build-essential wget curl
+RUN pip install --upgrade pip && apt-get update && apt-get install -y python3-dev build-essential wget curl libpq-dev
 
 ENV DOCKERIZE_VERSION v0.6.1
 RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSION/dockerize-linux-amd64-$DOCKERIZE_VERSION.tar.gz \
