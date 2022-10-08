@@ -1,0 +1,36 @@
+version: '3.4'
+
+services:
+  db:
+    image: postgres
+    networks:
+      - do-more-with-less-net
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=$DB_NAME
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASS
+  web_api:
+    hostname: web-api
+    build:
+      context: web_api
+    command: "./entrypoint.sh"  
+    networks:
+      - do-more-with-less-net
+    environment:
+      DB_NAME: $DB_NAME
+      DB_USER: $DB_USER
+      DB_PASS: $DB_PASS
+      DB_HOST: $DB_HOST
+      DB_PORT: $DB_PORT
+    volumes:
+      - ./web_api:/opt/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+networks:
+  do-more-with-less-net:
+    driver: bridge
