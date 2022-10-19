@@ -30,6 +30,27 @@ services:
       - "8000:8000"
     depends_on:
       - db
+  serverless:
+    build:
+      context: ./sls_functions
+    command: "tail -f /dev/null"
+    volumes:
+      - ./sls_functions:/opt/app
+      - /opt/app/node_modules
+      - ./web_api/do_more_with_less:/opt/app/layers/backend/python/do_more_with_less
+      - ./web_api/todo:/opt/app/layers/backend/python/todo
+    environment:
+      DB_NAME: postgres
+      DB_USER: postgres
+      DB_PASS: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+    networks:
+      - do-more-with-less-net
+    ports:
+      - "3001-3004:3001-3004"
+    depends_on:
+      - db
 
 networks:
   do-more-with-less-net:

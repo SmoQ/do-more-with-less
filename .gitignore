@@ -125,5 +125,6 @@ tmp/
 .~lock*
 
 web_api/media/
-
+web_api/static/
 data/
+

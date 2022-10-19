@@ -1,0 +1,22 @@
+{
+  "name": "DoMoreWithLess",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "scripts": {},
+  "author": "",
+  "license": "ISC",
+  "dependencies": {},
+  "devDependencies": {
+    "serverless-dynamodb-autoscaling": "^0.6.2",
+    "serverless-dynamodb-local": "^0.2.40",
+    "serverless": "^3.17.0",
+    "serverless-iam-roles-per-function": "3.2.0",
+    "serverless-offline": "^8.7.0",
+    "serverless-offline-ssm": "^6.2.0",
+    "serverless-plugin-select": "^2.0.0-rc.1",
+    "serverless-prune-plugin": "^2.0.1",
+    "serverless-python-requirements": "^5.4.0",
+    "serverless-webpack": "^5.7.0"
+  }
+}

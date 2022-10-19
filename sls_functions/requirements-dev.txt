@@ -1,0 +1,5 @@
+awscli==1.25.94
+black==22.10.0
+flake8==5.0.4
+isort==5.10.1
+psycopg2==2.9.4

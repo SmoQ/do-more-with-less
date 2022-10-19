@@ -1,4 +1,4 @@
-FROM python:3.10.7-slim
+FROM python:3.9.7-slim
 
 ENV PYTHONUNBUFFERED 1
 ENV APP_DIR /opt/app
@@ -15,7 +15,6 @@ RUN wget https://github.com/jwilder/dockerize/releases/download/$DOCKERIZE_VERSI
 WORKDIR ${APP_DIR}
 
 COPY requirements*.txt ${APP_DIR}/
-
 RUN pip install -r requirements.txt
 RUN useradd -ms /bin/bash web-api
 # Set dummy credentials to run with local serverless
