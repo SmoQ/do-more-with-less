@@ -35,28 +35,22 @@ custom:
     stages:
       - local
     ssm:
-      ${file(resources/custom/offline-ssm.yml)}
+      '/bm-local/backend/SECURITY_GROUP_IDS': 'sample-value-goes-here'
+      '/bm-local/backend/SUBNET_IDS': 'sample-value'
+      '/bm-local/backend/DB_PASS': 'plumbs'
+      '/bm-local/backend/DB_USER': 'plumbs'
+      '/bm-local/backend/DB_NAME': 'plumbs'
+      '/bm-local/backend/DB_HOST': 'db'
+      '/bm-local/backend/DB_PORT': '3306'
+      '/bm-local/backend/SECRET_KEY': '-pt5ibcuy$&pbf8@=z1ke3nt3t+2m(mqdy@#5qad&o!7q1u6kt'
+      '/misc/common/AWS_ACCESS_KEY_ID': 'not supported'
+      '/misc/common/AWS_SECRET_ACCESS_KEY': 'not supported'
 
 provider:
   name: aws
   runtime: python3.9
   region: us-east-2
   stage: ${opt:stage, 'dev'}
-  vpc:
-    securityGroupIds: ${ssm:/bm-${self:provider.stage}/backend/SECURITY_GROUP_IDS, null}
-    subnetIds: ${ssm:/bm-${self:provider.stage}/backend/SUBNET_IDS, null}
-  environment:
-    DB_PASS: ${ssm:/bm-${self:provider.stage}/backend/DB_PASS, null}
-    DB_USER: ${ssm:/bm-${self:provider.stage}/backend/DB_USER, null}
-    DB_NAME: ${ssm:/bm-${self:provider.stage}/backend/DB_NAME, null}
-    DB_HOST: ${ssm:/bm-${self:provider.stage}/backend/DB_HOST, null}
-    DB_PORT: ${ssm:/bm-${self:provider.stage}/backend/DB_PORT, null}
-    ENVIRONMENT: ${ssm:/bm-${self:provider.stage}/backend/ENVIRONMENT, null}
-    STAGE: ${opt:stage, 'dev'}
-    SECRET_KEY: ${ssm:/bm-${self:provider.stage}/backend/SECRET_KEY, null}
-    AWS_SES_ACCESS_KEY_ID: ${ssm:/misc/common/AWS_ACCESS_KEY_ID, null}
-    AWS_SES_SECRET_ACCESS_KEY: ${ssm:/misc/common/AWS_SECRET_ACCESS_KEY, null}
-    AWS_SES_REGION_NAME: ${ssm:/misc/common/AWS_SES_REGION_NAME, null}
   timeout: 900 # max lambda timeout 15 minute
   websocketApiName: do-more-with-less
   websocketApiRouteSelectionExpression: $request.body.action
@@ -72,3 +66,21 @@ package:
     - npm-debug.log
     - .serverless/**
     - .serverless_plugins/**
+
+
+	
+resources:
+  Resources:
+    usersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: usersTable
+        AttributeDefinitions:
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: email
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1

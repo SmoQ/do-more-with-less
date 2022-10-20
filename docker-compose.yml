@@ -33,7 +33,7 @@ services:
   serverless:
     build:
       context: ./sls_functions
-    command: "tail -f /dev/null"
+    command: "./entrypoint.sh"  
     volumes:
       - ./sls_functions:/opt/app
       - /opt/app/node_modules

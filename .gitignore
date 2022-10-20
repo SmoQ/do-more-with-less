@@ -127,4 +127,4 @@ tmp/
 web_api/media/
 web_api/static/
 data/
-
+sls_functions/.dynamodb/
