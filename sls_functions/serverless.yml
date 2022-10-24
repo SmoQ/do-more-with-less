@@ -45,6 +45,9 @@ custom:
       '/bm-local/backend/SECRET_KEY': '-pt5ibcuy$&pbf8@=z1ke3nt3t+2m(mqdy@#5qad&o!7q1u6kt'
       '/misc/common/AWS_ACCESS_KEY_ID': 'not supported'
       '/misc/common/AWS_SECRET_ACCESS_KEY': 'not supported'
+  paths:
+    local:
+      sample: sample/
 
 provider:
   name: aws
@@ -54,6 +57,7 @@ provider:
   timeout: 900 # max lambda timeout 15 minute
   websocketApiName: do-more-with-less
   websocketApiRouteSelectionExpression: $request.body.action
+  websocketsDescription: Custom Serverless Websockets
 
 package:
   individually: true
@@ -67,8 +71,29 @@ package:
     - .serverless/**
     - .serverless_plugins/**
 
+layers:
+  backend:
+    path: layers/backend
+    name: ${self:provider.stage}-backend
+    compatibleRuntimes:
+      - python3.9
+    package:
+      individually: true
+      exclude:
+        - ./**/media/**
 
-	
+  djangoRequirements:
+    path: ../layers/django_requirements
+    name: ${self:provider.stage}-django-requirements
+    compatibleRuntimes:
+      - python3.9
+
+  botoRequirements:
+    path: ../layers/boto_requirements
+    name: ${self:provider.stage}-boto-requirements
+    compatibleRuntimes:
+      - python3.9
+
 resources:
   Resources:
     usersTable:
@@ -84,3 +109,29 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
+
+functions:
+  sample:
+    handler: ${self:custom.paths.${opt:stage}.sample, ''}index.handler
+    module: sample
+    layers:
+      - { Ref: BackendLambdaLayer }
+      - { Ref: DjangoRequirementsLambdaLayer }
+    events:
+      - schedule: cron(0 2 * * ? *)
+  connectionHandler:
+    handler: handler.connectionHandler
+    layers: 
+      - { Ref: BotoRequirementsLambdaLayer }
+    events:
+      - websocket:
+          route: $connect
+      - websocket:
+          route: $disconnect
+  defaultHandler:
+    handler: handler.defaultHandler
+    layers:
+      - { Ref: BackendLambdaLayer }
+      - { Ref: DjangoRequirementsLambdaLayer }
+    events:
+      - websocket: $default
