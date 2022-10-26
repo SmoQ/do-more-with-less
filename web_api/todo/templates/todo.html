@@ -1,9 +1,41 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type='text/javascript'>
+const ws = new WebSocket('ws://localhost:3001');
+// Connection opened
+ws.addEventListener('open', (event) => {
+    console.log('it works');
+    ws.send('Hello Server!');
+});
+
+// Listen for messages
+ws.addEventListener('message', (event) => {
+    console.log('Message from server ', event.data);
+    const data = JSON.parse(event.data);
+    var div = document.getElementById(data.todo_id);
+    if (!div && data.todo_id) {
+        const base = document.getElementById('base'); 
+        div = document.createElement('div');
+        div.id = data.todo_id;
+        base.appendChild(div);
+        const title = document.createElement('b');
+        title.innerHTML = data.title;
+        div.appendChild(title);
+    }   
+    if (data.todo_id) {
+        const html = document.createElement('p');
+        html.innerHTML = '- ' + data.msg;
+        document.getElementById(data.todo_id).appendChild(html);
+    };
+});
+</script>
 TODO list
+<div id="base">
 {% for obj in queryset %}
-    <div> 
+    <div id="{{ obj.id }}"> 
         <b>{{ obj.title }}</b>
-        {% for item in obj.items_set %}
-        - {{ item.title }} ({{ item.due_date }}) {{ item.description }}
+        {% for item in obj.item_set.all %}
+            <p>- {{ item.title }} {{ item.description }}</p>
         {% endfor %}
     </div>
 {% endfor %}
+</div>

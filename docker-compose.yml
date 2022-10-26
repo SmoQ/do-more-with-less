@@ -45,6 +45,7 @@ services:
       DB_PASS: postgres
       DB_HOST: db
       DB_PORT: 5432
+      IS_OFFLINE: "true"
     networks:
       - do-more-with-less-net
     ports:

@@ -1,4 +1,5 @@
-awscli==1.25.94
+-r requirements-django.txt
+awscli==1.22.26
 black==22.10.0
 flake8==5.0.4
 isort==5.10.1

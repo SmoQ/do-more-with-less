@@ -1,1 +1,2 @@
+-r requirements-boto.txt
 django==4.1.2

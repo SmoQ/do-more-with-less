@@ -48,6 +48,7 @@ custom:
   paths:
     local:
       sample: sample/
+      websockets: websockets/
 
 provider:
   name: aws
@@ -101,10 +102,10 @@ resources:
       Properties:
         TableName: usersTable
         AttributeDefinitions:
-          - AttributeName: email
+          - AttributeName: connection_id
             AttributeType: S
         KeySchema:
-          - AttributeName: email
+          - AttributeName: connection_id
             KeyType: HASH
         ProvisionedThroughput:
           ReadCapacityUnits: 1
@@ -120,8 +121,9 @@ functions:
     events:
       - schedule: cron(0 2 * * ? *)
   connectionHandler:
-    handler: handler.connectionHandler
+    handler: ${self:custom.paths.${opt:stage}.websockets, ''}index.connection_handler
     layers: 
+      - { Ref: DjangoRequirementsLambdaLayer }
       - { Ref: BotoRequirementsLambdaLayer }
     events:
       - websocket:
@@ -129,9 +131,9 @@ functions:
       - websocket:
           route: $disconnect
   defaultHandler:
-    handler: handler.defaultHandler
+    handler: ${self:custom.paths.${opt:stage}.websockets, ''}index.default_handler
     layers:
-      - { Ref: BackendLambdaLayer }
       - { Ref: DjangoRequirementsLambdaLayer }
+      - { Ref: BotoRequirementsLambdaLayer }
     events:
       - websocket: $default
