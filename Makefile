@@ -61,8 +61,9 @@ enforce_lint_serverless_functions:
 	$(call _run_serverless_functions, black . --exclude=".serverless|unzip_requirements.py|layers")
 	$(call _run_serverless_functions, flake8)
 
+TITLE=
 invoke_sample:
-	docker-compose exec serverless npx sls invoke local --stage=local -f sample
+	docker-compose exec serverless npx sls invoke local --stage=local -f sample --data='{"title": "$(TITLE)"}'
 
 %: #Ignores unknown commands (and extra params)
 	@:

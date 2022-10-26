@@ -1,0 +1,9 @@
+TODO list
+{% for obj in queryset %}
+    <div> 
+        <b>{{ obj.title }}</b>
+        {% for item in obj.items_set %}
+        - {{ item.title }} ({{ item.due_date }}) {{ item.description }}
+        {% endfor %}
+    </div>
+{% endfor %}

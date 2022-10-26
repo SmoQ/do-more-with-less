@@ -6,6 +6,7 @@ import django_setup  # noqa: F401
 from todo.models import ToDo
 
 
-def handler(*args, **kwargs):
-    print("It works")
-    print(ToDo.objects.all())
+def handler(event, *args, **kwargs):
+    title = event.get("title")
+    obj = ToDo.objects.create(title=title)
+    print(f"Successfully created todo list {obj}.")
