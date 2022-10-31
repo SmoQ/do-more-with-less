@@ -18,11 +18,6 @@ WEBSOCKET_HTTP_URL = os.getenv("WEBSOCKET_HTTP_URL", "http://localhost:3001")
 
 apigateway = boto3.client("apigatewaymanagementapi", endpoint_url=WEBSOCKET_HTTP_URL)
 
-
-STAGE = os.getenv("STAGE")
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 CONNECT = "CONNECT"
 DISCONNECT = "DISCONNECT"
 TABLE_NAME = "usersTable"
